@@ -7,9 +7,9 @@ import { defineConfig, devices } from '@playwright/test';
 const config = ({
   testDir: './tests',
   // Only if I want to override the 30s timeout I write this bellow
-  timeout: 40 *1000,
+  timeout: 30 *1000,
    expect: {
-    timeout: 40 *1000,
+    timeout: 5000,
    },
    reporter : 'html',
 
