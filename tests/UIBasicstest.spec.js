@@ -75,10 +75,10 @@ test.only('Child windows hadl', async ({page})=>
     const text = await newPage.locator(".red").textContent();
     const arrayText = text.split("@")
     const domain = arrayText[1].split(" ")[0]
-    console.log(domain);
-    await page.locator("#username").type(domain);
-    await page.pause();
-    console.log(await page.locator("#username").textContent());
+    //console.log(domain);
+    await page.locator("#username").fill(domain);
+    //await page.pause();
+    console.log(await page.locator("#username").inputValue());
 
 
 
