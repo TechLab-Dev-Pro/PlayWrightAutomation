@@ -30,7 +30,22 @@ test('@WC Client App login', async ({page})=>
 
     const bool = await page.locator("h5:has-text('ZARA COAT 3").isVisible();
     expect(bool).toBeTruthy();
+    await page.locator("text=Checkout").click();
+    await page.locator("[placeholder*='Country']").pressSequentially("ind", {delay: 150});
 
+    const dropdown = page.locator(".ta-results");
+    await dropdown.waitFor();
+    const optionsCount = await dropdown.locator("button").count();
+    for(let i=0; i<optionsCount; ++i)
+    {
+        const text = await dropdown.locator("button").nth(i).textContent();
+            if(text === " India")
+            {
+                await dropdown.locator("button").nth(i).click();
+                break;
+            }
+    }
+    await page.pause()
 
     //Zara Coat 4
 
