@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-
+// npx playwright test --ui
 test("Playwright Special locators", async ({page}) => {
 
     await page.goto("https://rahulshettyacademy.com/angularpractise/");
