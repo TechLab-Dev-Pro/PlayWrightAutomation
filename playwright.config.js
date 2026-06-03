@@ -16,8 +16,10 @@ const config = ({
    use: {
 
       browserName : 'firefox',
-      headless : false
+      headless : false,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+      screenshot : 'on',
+      trace : 'on'
 
   },
 
