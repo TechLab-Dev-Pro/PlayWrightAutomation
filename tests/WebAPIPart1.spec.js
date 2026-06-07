@@ -1,17 +1,18 @@
 const {test, expect} = require('@playwright/test')
 const loginPayLoad = {userEmail:"anshika@gmail.com",userPassword:"Iamking@000"};
+let token;
 
 test.beforeAll( (async() =>
 {
 
     const apiContext = await request.newContext();
-    apiContext,post("https://rahulshettyacademy.com/api/ecom/auth/login",
+    const loginResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login",
     {
         data: loginPayLoad
     } )//200,201,2
     expect(loginResponse.ok()).toBeTruthy();
-    const loginResponseJson = loginResponse.json();
-    const token = loginResponseJson.token;
+    const loginResponseJson = await loginResponse.json();
+    token = loginResponseJson.token;
 
 }));
 
@@ -21,16 +22,22 @@ test.beforeEach( () =>
 
 })
 
-test('@WC Client App login', async ({page})=> 
+test('Place the order', async ({page})=> 
 {
+    await page.addInitScript(value => {
+
+        window.localStorage.setItem('token', value);
+    }, token);
+
+
     const productName = 'Zara Coat 4';
     const products = page.locator(".card-body");
     await page.goto("https://rahulshettyacademy.com/client");
-    await page.locator("#userEmail").fill("anshika@gmail.com");
-    await page.locator("#userPassword").fill("Iamking@000");
-    await page.locator("[value='Login']").click();
-    await page.waitForLoadState('networkidle');
-    await page.locator(".card-body b").first().waitFor();
+    //await page.locator("#userEmail").fill("anshika@gmail.com");
+    //await page.locator("#userPassword").fill("Iamking@000");
+    //await page.locator("[value='Login']").click();
+    //await page.waitForLoadState('networkidle');
+    //await page.locator(".card-body b").first().waitFor();
     const titles= await page.locator(".card-body b").allTextContents();
     console.log(titles);
     const count = await products.count();
