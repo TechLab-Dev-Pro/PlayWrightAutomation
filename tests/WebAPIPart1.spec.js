@@ -1,6 +1,8 @@
 const {test, expect} = require('@playwright/test')
 const loginPayLoad = {userEmail:"anshika@gmail.com",userPassword:"Iamking@000"};
+const orderPayLoad = {"orders": [{country:"India", productOrderedId:"62023a7616fcf72fe9dfc619"}]};
 let token;
+const orderId;
 
 test.beforeAll( (async() =>
 {
@@ -13,6 +15,21 @@ test.beforeAll( (async() =>
     expect(loginResponse.ok()).toBeTruthy();
     const loginResponseJson = await loginResponse.json();
     token = loginResponseJson.token;
+    console.log(token);
+
+    const orderResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order");
+    {
+        data : orderPayLoad,
+        headers: {
+                    'Authorization' : token,
+                    'Content-Type' : 'application/json'
+        };
+
+    }
+    const orderResponseJson = await orderResponse.json();
+    console.log(orderResponseJson);
+    orerId = orderResponseJson.orders[0];
+
 
 }));
 
@@ -29,53 +46,7 @@ test('Place the order', async ({page})=>
         window.localStorage.setItem('token', value);
     }, token);
 
-
-    const productName = 'Zara Coat 4';
-    const products = page.locator(".card-body");
-    await page.goto("https://rahulshettyacademy.com/client");
-    //await page.locator("#userEmail").fill("anshika@gmail.com");
-    //await page.locator("#userPassword").fill("Iamking@000");
-    //await page.locator("[value='Login']").click();
-    //await page.waitForLoadState('networkidle');
-    //await page.locator(".card-body b").first().waitFor();
-    const titles= await page.locator(".card-body b").allTextContents();
-    console.log(titles);
-    const count = await products.count();
-    for(let i = 0; i < count; ++i)
-    {
-    if(await products.nth(i).locator("b").textContent() === productName)
-    {
-        //add to cart
-        await products.nth(i).locator("text= Add To Cart").click();
-        break;
-    }
-    }
-    await page.locator("[routerlink*='cart']").click();
-    await page.locator("div li").first().waitFor();
-
-    const bool = await page.locator("h5:has-text('ZARA COAT 3").isVisible();
-    expect(bool).toBeTruthy();
-    await page.locator("text=Checkout").click();
-    await page.locator("[placeholder*='Country']").pressSequentially("ind", {delay: 150});
-
-    const dropdown = page.locator(".ta-results");
-    await dropdown.waitFor();
-    const optionsCount = await dropdown.locator("button").count();
-    for(let i=0; i<optionsCount; ++i)
-    {
-        const text = await dropdown.locator("button").nth(i).textContent();
-            if(text === " India")
-            {
-                await dropdown.locator("button").nth(i).click();
-                break;
-            }
-    }
-        expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
-        await page.locator(".action__submit").click();
-        expect(page.locator("hero-primary")).toHaveText(" Thank you for the order.");
-        const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
-        console.log(orderId);
-         
+   await page.goto("https://rahulshettyacademy.com/client/");
    await page.locator("button[routerlink*='myorders']").click();
    await page.locator("tbody").waitFor();
    const rows = await page.locator("tbody tr");
