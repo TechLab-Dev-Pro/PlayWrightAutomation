@@ -1,4 +1,5 @@
 const {test, expect} = require('@playwright/test')
+const {APIUtils} = require('./utils/APiUtils');
 const loginPayLoad = {userEmail:"anshika@gmail.com",userPassword:"Iamking@000"};
 const orderPayLoad = {"orders": [{country:"India", productOrderedId:"62023a7616fcf72fe9dfc619"}]};
 let token;
@@ -8,7 +9,8 @@ test.beforeAll( (async() =>
 {
 
     const apiContext = await request.newContext();
-    const loginResponse = await apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login",
+    const APiUtils = new APiUtils(apiContext, loginPayLoad);
+    APiUtils.createOrder(orderPayLoad);
     {
         data: loginPayLoad
     } )//200,201,2
@@ -28,7 +30,7 @@ test.beforeAll( (async() =>
     }
     const orderResponseJson = await orderResponse.json();
     console.log(orderResponseJson);
-    orerId = orderResponseJson.orders[0];
+    orderId = orderResponseJson.orders[0];
 
 
 }));
@@ -41,6 +43,8 @@ test.beforeEach( () =>
 
 test('Place the order', async ({page})=> 
 {
+    const APIUtils = new APIUtils(apiContext, loginPayLoad);
+    const orderId = createOrder();
     await page.addInitScript(value => {
 
         window.localStorage.setItem('token', value);
