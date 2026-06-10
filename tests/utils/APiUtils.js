@@ -22,19 +22,22 @@ class APIUtils
 
     async createOrder()
     {
+            let response = {};
+            response.token = await this.getToken();
             const orderResponse = await this.apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order");
     {
         data : orderPayLoad,
         headers: {
-                    'Authorization' : token,
+                    'Authorization' : response.token,
                     'Content-Type' : 'application/json'
         };
 
     }
     const orderResponseJson = await orderResponse.json();
     console.log(orderResponseJson);
-    orerId = orderResponseJson.orders[0];
-    return orderId;
+    const orderId = orderResponseJson.orders[0];
+    response.orderId = orderId;
+    return response;
 
 
     }

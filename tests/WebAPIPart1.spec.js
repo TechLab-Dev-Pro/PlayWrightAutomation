@@ -5,12 +5,12 @@ const orderPayLoad = {"orders": [{country:"India", productOrderedId:"62023a7616f
 let token;
 const orderId;
 
+let response;
 test.beforeAll( (async() =>
 {
-
     const apiContext = await request.newContext();
     const APiUtils = new APiUtils(apiContext, loginPayLoad);
-    APiUtils.createOrder(orderPayLoad);
+    response = await APiUtils.createOrder(orderPayLoad);
     {
         data: loginPayLoad
     } )//200,201,2
@@ -48,7 +48,7 @@ test('Place the order', async ({page})=>
     await page.addInitScript(value => {
 
         window.localStorage.setItem('token', value);
-    }, token);
+    }, response.token);
 
    await page.goto("https://rahulshettyacademy.com/client/");
    await page.locator("button[routerlink*='myorders']").click();
@@ -58,13 +58,13 @@ test('Place the order', async ({page})=>
  
    for (let i = 0; i < await rows.count(); ++i) {
       const rowOrderId = await rows.nth(i).locator("th").textContent();
-      if (orderId.includes(rowOrderId)) {
+      if (response.orderId.includes(rowOrderId)) {
          await rows.nth(i).locator("button").first().click();
          break;
       }
    }
    const orderIdDetails = await page.locator(".col-text").textContent();
-   expect(orderId.includes(orderIdDetails)).toBeTruthy();
+   expect(response.orderId.includes(orderIdDetails)).toBeTruthy();
 
     //Zara Coat 4
 
