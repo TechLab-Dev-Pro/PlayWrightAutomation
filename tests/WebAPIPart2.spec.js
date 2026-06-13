@@ -1,5 +1,4 @@
 //Login UI -> .json
-
 //test browser -> .json, cart-, order, orderdetails, orderhistory
 
 const {test, expect} = require('@playwright/test');
@@ -79,9 +78,6 @@ test('@WC Client App login', async ()=>
    }
    const orderIdDetails = await page.locator(".col-text").textContent();
    expect(orderId.includes(orderIdDetails)).toBeTruthy();
-
-
-
 
 });
 
