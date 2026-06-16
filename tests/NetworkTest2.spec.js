@@ -17,11 +17,4 @@ test('@QW Security test request intercept', async ({ page }) => {
     await page.locator("button:has-text('View')").first().click();
     await expect(page.locator("p").last()).toHaveText("You are not authorize to view this order");
  
- 
- 
- 
- 
- 
- 
- 
 })

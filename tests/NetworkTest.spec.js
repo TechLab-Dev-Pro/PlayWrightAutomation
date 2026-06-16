@@ -40,6 +40,5 @@ test('@SP Place the order', async ({ page }) => {
  
   console.log(await page.locator(".mt-4").textContent());
  
- 
- 
+
 });
